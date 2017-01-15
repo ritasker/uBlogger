@@ -6,10 +6,7 @@ namespace uBlogger.Api.Features.Home
     {
         public HomeModule()
         {
-            Post("SignUp", args =>
-            {
-                return 200;
-            });
+            Post("SignUp", args => 201);
         }
     }
 }

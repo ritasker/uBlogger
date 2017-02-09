@@ -1,14 +1,14 @@
 ﻿using FluentValidation;
 
-namespace uBlogger.Api.Features.Accounts.ViewModels
+namespace uBlogger.Api.Features.Accounts.SignUp
 {
-    public class SignUp
+    public class SignUpViewModel
     {
         public string Name { get; set; }
         public string Email { get; set; }
     }
 
-    public class SignUpValidator : AbstractValidator<SignUp>
+    public class SignUpValidator : AbstractValidator<SignUpViewModel>
     {
         public SignUpValidator()
         {

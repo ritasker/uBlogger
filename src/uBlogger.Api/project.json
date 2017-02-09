@@ -14,9 +14,16 @@
                 "Microsoft.AspNetCore.Authentication.Cookies": "1.1.0",
                 "Nancy": "2.0.0-clinteastwood",
                 "Nancy.Validation.FluentValidation": "2.0.0-clinteastwood",
+                "MediatR": "3.0.0",
                 "Microsoft.NETCore.App": {
                     "type": "platform",
                     "version": "1.0.1"
+                },
+                "uBlogger.Domain": {
+                    "target": "project"
+                },
+                "uBlogger.Infrastructure": {
+                    "target": "project"
                 }
             }
         }

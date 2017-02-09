@@ -1,6 +1,9 @@
+using MediatR;
 using Nancy;
 using Nancy.Configuration;
 using Nancy.Conventions;
+using Nancy.TinyIoc;
+using uBlogger.Api.Features.Accounts.SignUp;
 
 namespace uBlogger.Api
 {
@@ -15,6 +18,16 @@ namespace uBlogger.Api
             nancyConventions.ViewLocationConventions.Add(
                 (viewName, model, viewLocationContext) =>
                     "features/" + viewName);
+        }
+
+        protected override void ConfigureApplicationContainer(TinyIoCContainer container)
+        {
+            base.ConfigureApplicationContainer(container);
+
+            container.Register<IRequestHandler<SignUpCommand, Unit>>();
+
+            container.Register(new SingleInstanceFactory(container.Resolve));
+            container.Register(new MultiInstanceFactory(container.ResolveAll));
         }
 
         public override void Configure(INancyEnvironment environment)

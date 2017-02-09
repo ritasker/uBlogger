@@ -7,6 +7,10 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "uBlogger.Api", "src\uBlogge
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "uBlogger.Tests.Unit", "tests\uBlogger.Tests.Unit\uBlogger.Tests.Unit.xproj", "{2871963C-EEA1-46A8-BF81-2C20E67FF7E8}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "uBlogger.Domain", "src\uBlogger.Domain\uBlogger.Domain.xproj", "{92B1AE5E-0969-48BC-895B-11E89EE314B5}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "uBlogger.Infrastructure", "src\uBlogger.Infrastructure\uBlogger.Infrastructure.xproj", "{D5208C2F-4D9B-477A-A04D-9F0443D99E22}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{2871963C-EEA1-46A8-BF81-2C20E67FF7E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2871963C-EEA1-46A8-BF81-2C20E67FF7E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2871963C-EEA1-46A8-BF81-2C20E67FF7E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92B1AE5E-0969-48BC-895B-11E89EE314B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92B1AE5E-0969-48BC-895B-11E89EE314B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92B1AE5E-0969-48BC-895B-11E89EE314B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92B1AE5E-0969-48BC-895B-11E89EE314B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5208C2F-4D9B-477A-A04D-9F0443D99E22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5208C2F-4D9B-477A-A04D-9F0443D99E22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5208C2F-4D9B-477A-A04D-9F0443D99E22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5208C2F-4D9B-477A-A04D-9F0443D99E22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

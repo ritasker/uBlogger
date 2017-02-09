@@ -1,6 +1,8 @@
-﻿namespace uBlogger.Api.Features.Accounts.Commands
+﻿using MediatR;
+
+namespace uBlogger.Api.Features.Accounts.SignUp
 {
-    public class SignUpCommand
+    public class SignUpCommand : IRequest<Unit>
     {
         public SignUpCommand(string name, string email)
         {

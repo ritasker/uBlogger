@@ -9,6 +9,13 @@ namespace uBlogger.Api
 {
     public class Bootstrapper : DefaultNancyBootstrapper
     {
+        private readonly ApiConfiguration apiConfiguration;
+
+        public Bootstrapper(ApiConfiguration apiConfiguration)
+        {
+            this.apiConfiguration = apiConfiguration;
+        }
+
         protected override void ConfigureConventions(NancyConventions nancyConventions)
         {
             base.ConfigureConventions(nancyConventions);

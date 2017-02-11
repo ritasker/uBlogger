@@ -2,8 +2,11 @@
     "version": "1.0.0-*",
     "buildOptions": {
         "debugType": "portable",
-        "emitEntryPoint": true
+        "emitEntryPoint": true,
+        "copyToOutput": ["apisettings.json"]
     },
+
+    "publishOptions": ["apisettings.json"],
 
     "frameworks": {
         "netcoreapp1.0": {
@@ -12,6 +15,8 @@
                 "Microsoft.AspNetCore.Server.Kestrel": "1.0.1",
                 "Microsoft.AspNetCore.Owin": "1.0.0",
                 "Microsoft.AspNetCore.Authentication.Cookies": "1.1.0",
+                "Microsoft.Extensions.Configuration.Binder": "1.1.0",
+                "Microsoft.Extensions.Configuration.Json": "1.1.0",
                 "Nancy": "2.0.0-clinteastwood",
                 "Nancy.Validation.FluentValidation": "2.0.0-clinteastwood",
                 "MediatR": "3.0.0",

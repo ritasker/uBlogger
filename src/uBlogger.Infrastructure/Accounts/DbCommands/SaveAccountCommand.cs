@@ -3,7 +3,7 @@ using System.Data;
 using Dapper;
 using uBlogger.Infrastructure.Database;
 
-namespace uBlogger.Infrastructure.Accounts
+namespace uBlogger.Infrastructure.Accounts.DbCommands
 {
     public class SaveAccountCommand : SqlCommand
     {
@@ -16,6 +16,7 @@ namespace uBlogger.Infrastructure.Accounts
             _id = id;
             _name = name;
             _email = email;
+
             sql = "INSERT INTO Accounts VALUES (@Id, @Name, @Email);";
         }
 

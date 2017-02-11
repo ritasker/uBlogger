@@ -1,6 +1,6 @@
-﻿namespace uBlogger.Api.Features.Accounts.ViewModels
+﻿namespace uBlogger.Api.Features.Accounts.SignIn
 {
-    public class SignIn
+    public class SignInViewModel
     {
         public string Username { get; set; }
         public string Password { get; set; }

@@ -5,9 +5,9 @@ namespace uBlogger.Api
 
     public class Startup
     {
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, Bootstrapper bootstrapper)
         {
-            app.UseOwin(x => x.UseNancy());
+            app.UseOwin(x => x.UseNancy(options => { options.Bootstrapper = bootstrapper; }));
         }
     }
 }

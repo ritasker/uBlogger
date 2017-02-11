@@ -35,15 +35,9 @@ namespace uBlogger.Api
                     host.Start();
 
                     var appLifeTime = host.Services.GetRequiredService<IApplicationLifetime>();
-
                     appLifeTime.ApplicationStopping.Register(() =>
                     {
-                        Console.WriteLine("Stopping application, please wait for confirmation...");
-                    });
-
-                    appLifeTime.ApplicationStopped.Register(() =>
-                    {
-                        Console.WriteLine("Web Server has stopped");
+                        Console.WriteLine("Stopping application...");
                     });
 
                     Console.CancelKeyPress += (sender, e) =>

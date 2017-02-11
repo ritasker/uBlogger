@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Threading.Tasks;
 
 namespace uBlogger.Infrastructure.Database
 {
@@ -6,6 +7,6 @@ namespace uBlogger.Infrastructure.Database
     {
         protected string sql;
 
-        public abstract void Execute(IDbConnection connection);
+        public abstract Task ExecuteAsync(IDbConnection connection);
     }
 }

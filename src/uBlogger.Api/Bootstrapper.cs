@@ -4,6 +4,8 @@ using Nancy.Configuration;
 using Nancy.Conventions;
 using Nancy.TinyIoc;
 using uBlogger.Api.Features.Accounts.SignUp;
+using uBlogger.Infrastructure.Accounts;
+using uBlogger.Infrastructure.Database;
 
 namespace uBlogger.Api
 {
@@ -31,17 +33,31 @@ namespace uBlogger.Api
         {
             base.ConfigureApplicationContainer(container);
 
-            container.Register<IRequestHandler<SignUpCommand, Unit>>();
+            container.Register(apiConfiguration.Database);
 
-            container.Register(new SingleInstanceFactory(container.Resolve));
-            container.Register(new MultiInstanceFactory(container.ResolveAll));
+            container.Register<IDbConnectionProvider, PostgresConnectionProvider>();
+
+            container.Register<AccountRepository>();
+
+            container.Register<IRequestHandler<SignUpCommand, Unit>, SignUpCommandHandler>();
+
+            RegisterMediatR(container);
+
+
+        }
+
+        private static void RegisterMediatR(TinyIoCContainer container)
+        {
+            container.Register<SingleInstanceFactory>((c, p) => c.Resolve);
+            container.Register<MultiInstanceFactory>((c, p) => c.ResolveAll);
+            container.Register<IMediator, Mediator>();
         }
 
         public override void Configure(INancyEnvironment environment)
         {
             base.Configure(environment);
 
-            environment.Tracing(enabled: false, displayErrorTraces: true);
+            environment.Tracing(false, true);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Threading.Tasks;
 using Dapper;
 using uBlogger.Infrastructure.Database;
 
@@ -17,16 +18,24 @@ namespace uBlogger.Infrastructure.Accounts.DbCommands
             _name = name;
             _email = email;
 
-            sql = "INSERT INTO Accounts VALUES (@Id, @Name, @Email);";
+            sql = "INSERT INTO public.\"Accounts\"(\"Id\", \"Name\", \"Email\") VALUES (@Id, @Name, @Email);";
         }
 
 
-        public override void Execute(IDbConnection connection)
+        public override async Task ExecuteAsync(IDbConnection connection)
         {
             using (var transaction = connection.BeginTransaction())
             {
-                connection.ExecuteAsync(sql, new { Id = _id, Name = _name, Email = _email }, transaction);
-                transaction.Commit();
+                try
+                {
+                    await connection.ExecuteAsync(sql, new { Id = _id, Name = _name, Email = _email }, transaction);
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    transaction.Rollback();
+                }
             }
         }
     }

@@ -17,7 +17,7 @@ namespace uBlogger.Infrastructure.Accounts
             using (var connection = _dbConnectionProvider.GetConnection())
             {
                 var command = new SaveAccountCommand(account.Id, account.Name, account.Email);
-                command.Execute(connection);
+                command.ExecuteAsync(connection);
             }
         }
     }

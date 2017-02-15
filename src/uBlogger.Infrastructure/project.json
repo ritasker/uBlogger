@@ -4,12 +4,13 @@
     "debugType": "portable"
   },
   "dependencies": {
-     "NETStandard.Library": "1.6.0",
+     "NETStandard.Library": "1.6.1",
      "uBlogger.Domain": {
          "target": "project"
      },
      "Dapper":"1.50.2",
-      "Npgsql": "3.2.0"
+     "Npgsql": "3.2.0",
+     "MailKit": "1.10.2"
   },
   "frameworks": {
     "netstandard1.6": {

@@ -1,8 +1,8 @@
 ﻿using uBlogger.Infrastructure.Database;
 
-namespace uBlogger.Api
+namespace uBlogger.DbMigrations
 {
-    public class ApiConfiguration
+    public class DbMigrationsConfig
     {
         public DatabaseConfiguration Database { get; set; }
     }

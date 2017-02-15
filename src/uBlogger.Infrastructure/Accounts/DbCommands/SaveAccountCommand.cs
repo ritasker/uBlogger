@@ -31,10 +31,10 @@ namespace uBlogger.Infrastructure.Accounts.DbCommands
                     await connection.ExecuteAsync(sql, new { Id = _id, Name = _name, Email = _email }, transaction);
                     transaction.Commit();
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    Console.WriteLine(e);
                     transaction.Rollback();
+                    throw new TransactionFailedException(GetType(), ex);
                 }
             }
         }

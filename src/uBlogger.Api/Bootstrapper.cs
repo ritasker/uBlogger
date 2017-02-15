@@ -4,18 +4,20 @@ using Nancy.Configuration;
 using Nancy.Conventions;
 using Nancy.TinyIoc;
 using uBlogger.Api.Features.Accounts.SignUp;
+using uBlogger.Infrastructure;
 using uBlogger.Infrastructure.Accounts;
 using uBlogger.Infrastructure.Database;
+using uBlogger.Infrastructure.Email;
 
 namespace uBlogger.Api
 {
     public class Bootstrapper : DefaultNancyBootstrapper
     {
-        private readonly ApiConfiguration apiConfiguration;
+        private readonly ApplicationConfiguration applicationConfiguration;
 
-        public Bootstrapper(ApiConfiguration apiConfiguration)
+        public Bootstrapper(ApplicationConfiguration applicationConfiguration)
         {
-            this.apiConfiguration = apiConfiguration;
+            this.applicationConfiguration = applicationConfiguration;
         }
 
         protected override void ConfigureConventions(NancyConventions nancyConventions)
@@ -33,17 +35,18 @@ namespace uBlogger.Api
         {
             base.ConfigureApplicationContainer(container);
 
-            container.Register(apiConfiguration.Database);
+            container.Register(applicationConfiguration.Database);
+            container.Register(applicationConfiguration.Email);
 
             container.Register<IDbConnectionProvider, PostgresConnectionProvider>();
 
             container.Register<AccountRepository>();
 
+            container.Register<EmailService>();
+
             container.Register<IRequestHandler<SignUpCommand, Unit>, SignUpCommandHandler>();
 
             RegisterMediatR(container);
-
-
         }
 
         private static void RegisterMediatR(TinyIoCContainer container)

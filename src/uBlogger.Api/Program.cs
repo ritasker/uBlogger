@@ -1,7 +1,12 @@
 using System;
+using System.Linq;
 using System.Reflection;
+using Dapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
+using uBlogger.Infrastructure;
+using uBlogger.Infrastructure.Email;
 
 namespace uBlogger.Api
 {
@@ -17,10 +22,10 @@ namespace uBlogger.Api
                 .SetBasePath(Path.GetDirectoryName(typeof(Startup).GetTypeInfo().Assembly.Location));
 
             var config = builder.Build();
-            var apiConfiguration = new ApiConfiguration();
-            config.Bind(apiConfiguration);
 
-            using (var bootstrapper = new Bootstrapper(apiConfiguration))
+            var appConfig = GetApplicationConfiguration(config["ConnectionString"]);
+
+            using (var bootstrapper = new Bootstrapper(appConfig))
             {
                 using (var host = new WebHostBuilder()
                     .UseContentRoot(Directory.GetCurrentDirectory())
@@ -33,6 +38,7 @@ namespace uBlogger.Api
                     .Build())
                 {
                     host.Start();
+                    Console.WriteLine("Running on http://localhost:5000");
 
                     var appLifeTime = host.Services.GetRequiredService<IApplicationLifetime>();
                     appLifeTime.ApplicationStopping.Register(() =>
@@ -48,6 +54,20 @@ namespace uBlogger.Api
 
                     appLifeTime.ApplicationStopping.WaitHandle.WaitOne();
                 }
+            }
+        }
+
+        private static ApplicationConfiguration GetApplicationConfiguration(string connectionString)
+        {
+            using (var connection = new NpgsqlConnection(connectionString))
+            {
+                connection.Open();
+
+                var sql = "SELECT * FROM settings.\"EmailConfig\";";
+
+                var emailConfig = connection.Query<EmailConfiguation>(sql).FirstOrDefault();
+
+                return new ApplicationConfiguration(emailConfig, connectionString);
             }
         }
     }

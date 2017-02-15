@@ -2,7 +2,11 @@
 {
     public class DatabaseConfiguration
     {
+        public DatabaseConfiguration(string connectionString)
+        {
+            ConnectionString = connectionString;
+        }
+
         public string ConnectionString { get; set; }
-        public string Provider { get; set; }
     }
 }

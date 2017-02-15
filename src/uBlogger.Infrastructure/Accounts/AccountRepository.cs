@@ -1,4 +1,5 @@
-﻿using uBlogger.Domain.Accounts;
+﻿using System.Threading.Tasks;
+using uBlogger.Domain.Accounts;
 using uBlogger.Infrastructure.Accounts.DbCommands;
 using uBlogger.Infrastructure.Database;
 
@@ -12,12 +13,12 @@ namespace uBlogger.Infrastructure.Accounts
         {
             _dbConnectionProvider = dbConnectionProvider;
         }
-        public void Save(Account account)
+        public async Task Save(Account account)
         {
             using (var connection = _dbConnectionProvider.GetConnection())
             {
                 var command = new SaveAccountCommand(account.Id, account.Name, account.Email);
-                command.ExecuteAsync(connection);
+                await command.ExecuteAsync(connection);
             }
         }
     }

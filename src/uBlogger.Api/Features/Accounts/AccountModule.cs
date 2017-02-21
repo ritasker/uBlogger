@@ -19,8 +19,8 @@ namespace uBlogger.Api.Features.Accounts
 
         private Task<HttpStatusCode> SignUp()
         {
-            var model = this.Bind<SignUpViewModel>();
-            var command = new SignUpCommand(model.Name, model.Email);
+            var model = this.BindAndValidate<SignUpViewModel>();
+            var command = new SignUpCommand(model.Username, model.Email, model.Password);
 
             _mediator.Send(command);
 

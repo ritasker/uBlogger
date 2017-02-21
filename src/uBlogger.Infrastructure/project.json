@@ -10,7 +10,8 @@
      },
      "Dapper":"1.50.2",
      "Npgsql": "3.2.0",
-     "MailKit": "1.10.2"
+     "MailKit": "1.10.2",
+     "BCrypt.Net-Core": "1.1.0"
   },
   "frameworks": {
     "netstandard1.6": {

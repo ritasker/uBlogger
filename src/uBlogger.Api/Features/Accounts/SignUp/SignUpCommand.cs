@@ -4,13 +4,15 @@ namespace uBlogger.Api.Features.Accounts.SignUp
 {
     public class SignUpCommand : IRequest<Unit>
     {
-        public SignUpCommand(string name, string email)
+        public SignUpCommand(string userName, string email, string password)
         {
-            Name = name;
+            UserName = userName;
             Email = email;
+            Password = password;
         }
 
-        public string Name { get; private set; }
-        public string Email { get; private set; }
+        public string UserName { get; }
+        public string Email { get; }
+        public string Password { get; }
     }
 }

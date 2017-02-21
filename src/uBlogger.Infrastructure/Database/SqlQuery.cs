@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace uBlogger.Infrastructure.Database
 {
-    public abstract class SqlCommand
+    public abstract class SqlQuery<T>
     {
         protected string sql;
-        public abstract Task ExecuteAsync(IDbConnection connection);
+        public abstract Task<T> QueryAsync(IDbConnection connection);
     }
 }

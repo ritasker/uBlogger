@@ -9,5 +9,11 @@ namespace uBlogger.Domain
             if (string.IsNullOrEmpty(value))
                 throw new ArgumentException("Argument cannot be null or empty.", argName);
         }
+
+        public static void NotNullOrEmpty(Guid value, string argName)
+        {
+            if (value == null || value == Guid.Empty)
+                throw new ArgumentException("Argument cannot be null or empty.", argName);
+        }
     }
 }

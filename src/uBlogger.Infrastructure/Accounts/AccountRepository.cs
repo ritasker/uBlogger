@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
-using uBlogger.Domain.Accounts;
+using uBlogger.Domain.Entities;
 using uBlogger.Infrastructure.Accounts.DbCommands;
+using uBlogger.Infrastructure.Accounts.DbQueries;
 using uBlogger.Infrastructure.Database;
 
 namespace uBlogger.Infrastructure.Accounts
@@ -17,8 +18,17 @@ namespace uBlogger.Infrastructure.Accounts
         {
             using (var connection = _dbConnectionProvider.GetConnection())
             {
-                var command = new SaveAccountCommand(account.Id, account.Name, account.Email);
+                var command = new SaveAccountCommand(account);
                 await command.ExecuteAsync(connection);
+            }
+        }
+
+        public async Task<Account> FindByUsername(string username)
+        {
+            using (var connection = _dbConnectionProvider.GetConnection())
+            {
+                var query = new FindAccountByUsernameQuery(username);
+                return await query.QueryAsync(connection);
             }
         }
     }

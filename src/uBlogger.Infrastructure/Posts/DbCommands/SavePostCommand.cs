@@ -3,27 +3,26 @@ using System.Data;
 using System.Threading.Tasks;
 using Dapper;
 using uBlogger.Domain.Entities;
+using uBlogger.Infrastructure.Accounts.DbCommands;
 using uBlogger.Infrastructure.Database;
 
-namespace uBlogger.Infrastructure.Accounts.DbCommands
+namespace uBlogger.Infrastructure.Posts.DbCommands
 {
-    public class SaveAccountCommand : SqlCommand
+    public class SavePostCommand : SqlCommand
     {
-        private readonly Account account;
-
-        public SaveAccountCommand(Account account)
+        private readonly Post _post;
+        public SavePostCommand(Post post)
         {
-            this.account = account;
-            sql = "INSERT INTO public.\"Accounts\"(\"Id\", \"UserName\", \"Email\", \"Hash\") VALUES (@Id, @UserName, @Email, @Hash);";
+            _post = post;
+            sql = "INSERT INTO public.\"Posts\"(\"Id\", \"AccountId\", \"Date\", \"Content\") VALUES (@Id, @AccountId, @Date, @Content);";
         }
-
         public override async Task ExecuteAsync(IDbConnection connection)
         {
             using (var transaction = connection.BeginTransaction())
             {
                 try
                 {
-                    await connection.ExecuteAsync(sql, account, transaction);
+                    await connection.ExecuteAsync(sql, _post, transaction);
                     transaction.Commit();
                 }
                 catch (Exception ex)

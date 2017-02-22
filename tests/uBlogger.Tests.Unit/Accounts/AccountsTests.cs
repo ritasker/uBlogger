@@ -9,7 +9,6 @@ using Nancy.Testing;
 using uBlogger.Api.Features.Accounts;
 using uBlogger.Api.Features.Accounts.SignUp;
 using uBlogger.Infrastructure.Accounts;
-using uBlogger.Infrastructure.Email;
 using uBlogger.Tests.Unit.Helpers;
 using Xunit;
 
@@ -23,7 +22,7 @@ namespace uBlogger.Tests.Unit.Accounts
 //            var dbConnectionProvider = A.Fake<IDbConnectionProvider>();
 //            A.CallTo(() => dbConnectionProvider.GetConnection()).Returns(A.Fake<IDbConnection>());
 
-            var commandHandler = new SignUpCommandHandler(new AccountRepository(null), new EmailService(null));
+            var commandHandler = new SignUpCommandHandler(new AccountRepository(null));
             var browser = new Browser(with =>
             {
                 with.Module<AccountModule>();

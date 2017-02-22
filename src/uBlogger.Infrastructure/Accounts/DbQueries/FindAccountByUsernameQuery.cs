@@ -18,7 +18,8 @@ namespace uBlogger.Infrastructure.Accounts.DbQueries
         }
         public override async Task<Account> QueryAsync(IDbConnection connection)
         {
-            return connection.QueryAsync<Account>(sql, new {UserName = _username}).GetAwaiter().GetResult().Single();
+            var results = await connection.QueryAsync<Account>(sql, new {UserName = _username});
+            return results.Single();
         }
     }
 }

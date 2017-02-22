@@ -10,10 +10,15 @@ using Nancy.TinyIoc;
 using uBlogger.Api.Authorization;
 using uBlogger.Api.Features.Accounts.SignUp;
 using uBlogger.Api.Features.Posts;
+using uBlogger.Api.Features.Posts.AddPost;
+using uBlogger.Api.Features.Users;
+using uBlogger.Api.Features.Users.Follow;
 using uBlogger.Infrastructure;
 using uBlogger.Infrastructure.Accounts;
 using uBlogger.Infrastructure.Database;
 using uBlogger.Infrastructure.Email;
+using uBlogger.Infrastructure.Follow;
+using uBlogger.Infrastructure.Posts;
 using uBlogger.Infrastructure.Security;
 
 namespace uBlogger.Api
@@ -86,15 +91,33 @@ namespace uBlogger.Api
 
             container.Register<IDbConnectionProvider, PostgresConnectionProvider>();
 
-            container.Register<AccountRepository>();
+            RegisterRepositories(container);
 
-            container.Register<EmailService>();
-            container.Register<HashingService>();
+            RegisterServices(container);
 
-            container.Register<IRequestHandler<SignUpCommand, Unit>, SignUpCommandHandler>();
-            container.Register<IRequestHandler<AddPostCommand, Guid>, AddPostCommandHandler>();
+            RegisterHandlers(container);
 
             RegisterMediatR(container);
+        }
+
+        private static void RegisterHandlers(TinyIoCContainer container)
+        {
+            container.Register<IRequestHandler<SignUpCommand>, SignUpCommandHandler>();
+            container.Register<IRequestHandler<AddPostCommand, Guid>, AddPostCommandHandler>();
+            container.Register<IRequestHandler<FollowUserCommand>, FollowUserCommandHandler>();
+        }
+
+        private static void RegisterServices(TinyIoCContainer container)
+        {
+            container.Register<EmailService>();
+            container.Register<HashingService>();
+        }
+
+        private static void RegisterRepositories(TinyIoCContainer container)
+        {
+            container.Register<AccountRepository>();
+            container.Register<PostRepository>();
+            container.Register<FollowRepository>();
         }
 
         private static void RegisterMediatR(TinyIoCContainer container)

@@ -4,12 +4,13 @@ using MediatR;
 using Nancy;
 using Nancy.Security;
 using Nancy.ModelBinding;
+using uBlogger.Api.Features.Posts.AddPost;
 
 namespace uBlogger.Api.Features.Posts
 {
     public class PostsModule : NancyModule
     {
-        public PostsModule(IMediator mediator) : base("/Accounts/{Username}/Posts")
+        public PostsModule(IMediator mediator) : base("/{Username}/Posts")
         {
             Post("/", args =>
             {

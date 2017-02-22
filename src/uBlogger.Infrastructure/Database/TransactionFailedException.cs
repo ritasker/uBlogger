@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace uBlogger.Infrastructure.Accounts.DbCommands
+namespace uBlogger.Infrastructure.Database
 {
     public class TransactionFailedException : Exception
     {

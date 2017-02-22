@@ -2,7 +2,7 @@
 
 namespace uBlogger.Api.Features.Accounts.SignUp
 {
-    public class SignUpCommand : IRequest<Unit>
+    public class SignUpCommand : IRequest
     {
         public SignUpCommand(string userName, string email, string password)
         {

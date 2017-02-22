@@ -3,7 +3,7 @@ using MediatR;
 using uBlogger.Domain.Entities;
 using uBlogger.Infrastructure.Posts;
 
-namespace uBlogger.Api.Features.Posts
+namespace uBlogger.Api.Features.Posts.AddPost
 {
     public class AddPostCommandHandler : IRequestHandler<AddPostCommand, Guid>
     {

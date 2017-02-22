@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using uBlogger.Domain.Entities;
 using uBlogger.Infrastructure.Accounts.DbCommands;
 using uBlogger.Infrastructure.Accounts.DbQueries;
@@ -14,6 +15,7 @@ namespace uBlogger.Infrastructure.Accounts
         {
             _dbConnectionProvider = dbConnectionProvider;
         }
+
         public async Task Save(Account account)
         {
             using (var connection = _dbConnectionProvider.GetConnection())
@@ -28,6 +30,15 @@ namespace uBlogger.Infrastructure.Accounts
             using (var connection = _dbConnectionProvider.GetConnection())
             {
                 var query = new FindAccountByUsernameQuery(username);
+                return await query.QueryAsync(connection);
+            }
+        }
+
+        public async Task<Account> FindById(Guid accountId)
+        {
+            using (var connection = _dbConnectionProvider.GetConnection())
+            {
+                var query = new FindAccountByIdQuery(accountId);
                 return await query.QueryAsync(connection);
             }
         }

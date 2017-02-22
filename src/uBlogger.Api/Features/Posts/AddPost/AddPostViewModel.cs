@@ -1,4 +1,4 @@
-﻿namespace uBlogger.Api.Features.Posts
+﻿namespace uBlogger.Api.Features.Posts.AddPost
 {
     public class AddPostViewModel
     {

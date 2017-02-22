@@ -11,8 +11,10 @@ using uBlogger.Api.Authorization;
 using uBlogger.Api.Features.Accounts.SignUp;
 using uBlogger.Api.Features.Posts;
 using uBlogger.Api.Features.Posts.AddPost;
+using uBlogger.Api.Features.Posts.UserPosts;
 using uBlogger.Api.Features.Users;
 using uBlogger.Api.Features.Users.Follow;
+using uBlogger.Domain.Entities;
 using uBlogger.Infrastructure;
 using uBlogger.Infrastructure.Accounts;
 using uBlogger.Infrastructure.Database;
@@ -105,6 +107,7 @@ namespace uBlogger.Api
             container.Register<IRequestHandler<SignUpCommand>, SignUpCommandHandler>();
             container.Register<IRequestHandler<AddPostCommand, Guid>, AddPostCommandHandler>();
             container.Register<IRequestHandler<FollowUserCommand>, FollowUserCommandHandler>();
+            container.Register<IRequestHandler<UserPostsQuery, IEnumerable<Post>>, UserPostsQueryHandler>();
         }
 
         private static void RegisterServices(TinyIoCContainer container)

@@ -7,6 +7,7 @@ using Nancy;
 using Nancy.ModelBinding;
 using Nancy.Security;
 using Nancy.Validation;
+using uBlogger.Api.Features.Posts.Timeline;
 using uBlogger.Api.Features.Users.Follow;
 
 namespace uBlogger.Api.Features.Users
@@ -20,6 +21,17 @@ namespace uBlogger.Api.Features.Users
             this.mediator = mediator;
 
             Post("/{Username}/Follow", async _ => await FollowUser());
+
+            Get("/{Timeline}", async _ =>
+            {
+                this.RequiresAuthentication();
+                var accountId = Context.CurrentUser.Claims.First(x => x.Type == "AccountId").Value;
+                var result =  await this.mediator.Send(new UserTimelineQuery(Guid.Parse(accountId)));
+
+                return Negotiate
+                    .WithModel(result)
+                    .WithStatusCode(HttpStatusCode.OK);
+            });
 
         }
 
@@ -52,5 +64,9 @@ namespace uBlogger.Api.Features.Users
                 .WithModel(ModelValidationResult.FormattedErrors)
                 .WithStatusCode(HttpStatusCode.UnprocessableEntity);
         }
+    }
+
+    public class UserTimelineViewModel
+    {
     }
 }

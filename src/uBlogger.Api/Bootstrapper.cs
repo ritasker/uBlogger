@@ -9,10 +9,9 @@ using Nancy.Conventions;
 using Nancy.TinyIoc;
 using uBlogger.Api.Authorization;
 using uBlogger.Api.Features.Accounts.SignUp;
-using uBlogger.Api.Features.Posts;
 using uBlogger.Api.Features.Posts.AddPost;
+using uBlogger.Api.Features.Posts.Timeline;
 using uBlogger.Api.Features.Posts.UserPosts;
-using uBlogger.Api.Features.Users;
 using uBlogger.Api.Features.Users.Follow;
 using uBlogger.Domain.Entities;
 using uBlogger.Infrastructure;
@@ -108,6 +107,7 @@ namespace uBlogger.Api
             container.Register<IRequestHandler<AddPostCommand, Guid>, AddPostCommandHandler>();
             container.Register<IRequestHandler<FollowUserCommand>, FollowUserCommandHandler>();
             container.Register<IRequestHandler<UserPostsQuery, IEnumerable<Post>>, UserPostsQueryHandler>();
+            container.Register<IRequestHandler<Features.Posts.Timeline.UserTimelineQuery, IEnumerable<Post>>, UserTimelineQueryHandler>();
         }
 
         private static void RegisterServices(TinyIoCContainer container)

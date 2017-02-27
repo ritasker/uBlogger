@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using uBlogger.Domain.Entities;
 using uBlogger.Infrastructure.Database;
@@ -29,6 +30,15 @@ namespace uBlogger.Infrastructure.Posts
             using (var connection = _dbConnectionProvider.GetConnection())
             {
                 var command = new PostsByUsernameQuery(username);
+                return await command.QueryAsync(connection);
+            }
+        }
+
+        public async Task<IEnumerable<Post>> UserTimeline(Guid accountId)
+        {
+            using (var connection = _dbConnectionProvider.GetConnection())
+            {
+                var command = new UserTimelineQuery(accountId);
                 return await command.QueryAsync(connection);
             }
         }

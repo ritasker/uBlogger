@@ -26,6 +26,8 @@ namespace uBlogger.Api.Features.Posts
                     .WithModel(result)
                     .WithStatusCode(HttpStatusCode.OK);
             });
+
+
         }
 
         private object AddPost(IMediator mediator)

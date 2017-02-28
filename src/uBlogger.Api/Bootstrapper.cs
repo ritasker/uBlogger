@@ -88,7 +88,6 @@ namespace uBlogger.Api
             base.ConfigureApplicationContainer(container);
 
             container.Register(applicationConfiguration.Database);
-            container.Register(applicationConfiguration.Email);
 
             container.Register<IDbConnectionProvider, PostgresConnectionProvider>();
 

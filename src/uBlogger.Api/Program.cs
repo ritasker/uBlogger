@@ -23,13 +23,14 @@ namespace uBlogger.Api
 
             var config = builder.Build();
 
-            var appConfig = GetApplicationConfiguration(config["ConnectionString"]);
+            var appConfig = new ApplicationConfiguration(config["ConnectionString"]);
 
             using (var bootstrapper = new Bootstrapper(appConfig))
             {
                 using (var host = new WebHostBuilder()
                     .UseContentRoot(Directory.GetCurrentDirectory())
                     .UseKestrel()
+                    .UseIISIntegration()
                     .ConfigureServices(s =>
                     {
                         s.AddSingleton(bootstrapper);
@@ -54,20 +55,6 @@ namespace uBlogger.Api
 
                     appLifeTime.ApplicationStopping.WaitHandle.WaitOne();
                 }
-            }
-        }
-
-        private static ApplicationConfiguration GetApplicationConfiguration(string connectionString)
-        {
-            using (var connection = new NpgsqlConnection(connectionString))
-            {
-                connection.Open();
-
-                var sql = "SELECT * FROM settings.\"EmailConfig\";";
-
-                var emailConfig = connection.Query<EmailConfiguation>(sql).FirstOrDefault();
-
-                return new ApplicationConfiguration(emailConfig, connectionString);
             }
         }
     }

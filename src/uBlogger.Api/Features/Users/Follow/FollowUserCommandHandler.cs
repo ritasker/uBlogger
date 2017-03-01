@@ -1,24 +1,21 @@
 ﻿using MediatR;
-using uBlogger.Infrastructure.Accounts;
 using uBlogger.Infrastructure.Follow;
+using uBlogger.Infrastructure.Following;
 
 namespace uBlogger.Api.Features.Users.Follow
 {
     public class FollowUserCommandHandler : IRequestHandler<FollowUserCommand>
     {
-        private readonly AccountRepository accountRepository;
-        private readonly FollowRepository followRepository;
+        private readonly FollowingRepository followingRepository;
 
-        public FollowUserCommandHandler(AccountRepository accountRepository, FollowRepository followRepository)
+        public FollowUserCommandHandler(FollowingRepository followingRepository)
         {
-            this.accountRepository = accountRepository;
-            this.followRepository = followRepository;
+            this.followingRepository = followingRepository;
         }
+
         public void Handle(FollowUserCommand message)
         {
-            var account = accountRepository.FindByUsername(message.Username).GetAwaiter().GetResult();
-            var follow = new Domain.Entities.Follow(message.Username, account.UserName);
-            followRepository.Save(follow).GetAwaiter();
+            followingRepository.Save(message.Follower, message.Followee).GetAwaiter();
         }
     }
 }

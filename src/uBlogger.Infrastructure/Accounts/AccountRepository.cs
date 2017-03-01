@@ -16,24 +16,21 @@ namespace uBlogger.Infrastructure.Accounts
             _cloudTableClient = storageAccount.CreateCloudTableClient();
         }
 
-        public async Task Save(Account account)
+        public async Task Save(string userName, string email, string hash)
         {
             var tableReference = _cloudTableClient.GetTableReference("AccountByUsername");
-            var operation = TableOperation.Insert(new AccountByUsername(account.UserName, account.Email, account.Hash));
+            var operation = TableOperation.Insert(new AccountByUsername(userName, email, hash));
             await tableReference.ExecuteAsync(operation);
         }
 
-        public async Task<Account> FindByUsername(string username)
+        public async Task<AccountByUsername> FindByUsername(string username)
         {
             var tableReference = _cloudTableClient.GetTableReference("AccountByUsername");
             var retrieveOperation = TableOperation.Retrieve<AccountByUsername>(username.Substring(0,3), username);
 
             var result = await tableReference.ExecuteAsync(retrieveOperation);
 
-            var accountByUsername = result.Result as AccountByUsername;
-            return accountByUsername != null
-                ? new Account(accountByUsername.Username, accountByUsername.Email, accountByUsername.Hash)
-                : null;
+            return result.Result as AccountByUsername;
         }
     }
 }

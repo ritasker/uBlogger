@@ -1,17 +1,16 @@
-﻿using System;
-using MediatR;
+﻿using MediatR;
 
 namespace uBlogger.Api.Features.Users.Follow
 {
     public class FollowUserCommand : IRequest
     {
-        public FollowUserCommand(Guid accountId, string username)
+        public FollowUserCommand(string follower, string followee)
         {
-            AccountId = accountId;
-            Username = username;
+            Follower = follower;
+            Followee = followee;
         }
         
-        public Guid AccountId { get; set; }
-        public string Username { get; set; }
+        public string Follower { get; set; }
+        public string Followee { get; set; }
     }
 }

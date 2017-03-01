@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using MediatR;
-using uBlogger.Domain.Entities;
+﻿using MediatR;
 using uBlogger.Infrastructure.Accounts;
 using uBlogger.Infrastructure.Security;
 
@@ -20,9 +18,7 @@ namespace uBlogger.Api.Features.Accounts.SignUp
         public void Handle(SignUpCommand message)
         {
             var hash = _hashingService.HashPassword(message.Password);
-            var account = new Account(message.UserName, message.Email, hash);
-
-            _accountRepository.Save(account).GetAwaiter();
+            _accountRepository.Save(message.UserName, message.Email, hash).GetAwaiter();
         }
     }
 }

@@ -45,11 +45,9 @@ namespace uBlogger.Api.Features.Users
             {
                 var username = Context.CurrentUser.Claims.First(x => x.Type == "Username").Value;
 
-                if (model.Username.ToLower() != username.ToLower())
+                if (!String.Equals(model.Username, username, StringComparison.CurrentCultureIgnoreCase))
                 {
-                    var accountId = Context.CurrentUser.Claims.First(x => x.Type == "AccountId").Value;
-                    await mediator.Send(new FollowUserCommand(Guid.Parse(accountId), model.Username));
-
+                    await mediator.Send(new FollowUserCommand(username, model.Username));
                     return HttpStatusCode.Created;
                 }
 
@@ -64,9 +62,5 @@ namespace uBlogger.Api.Features.Users
                 .WithModel(ModelValidationResult.FormattedErrors)
                 .WithStatusCode(HttpStatusCode.UnprocessableEntity);
         }
-    }
-
-    public class UserTimelineViewModel
-    {
     }
 }

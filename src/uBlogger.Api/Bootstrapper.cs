@@ -18,7 +18,7 @@ using uBlogger.Infrastructure;
 using uBlogger.Infrastructure.Accounts;
 using uBlogger.Infrastructure.Database;
 using uBlogger.Infrastructure.Email;
-using uBlogger.Infrastructure.Follow;
+using uBlogger.Infrastructure.Following;
 using uBlogger.Infrastructure.Posts;
 using uBlogger.Infrastructure.Security;
 
@@ -55,7 +55,7 @@ namespace uBlogger.Api
                             {
                                 var claims = new List<Claim>
                                 {
-                                    new Claim("Username", account.UserName),
+                                    new Claim("Username", account.Username),
                                     new Claim("Email", account.Email)
                                 };
 
@@ -118,7 +118,7 @@ namespace uBlogger.Api
         {
             container.Register<AccountRepository>();
             container.Register<PostRepository>();
-            container.Register<FollowRepository>();
+            container.Register<FollowingRepository>();
         }
 
         private static void RegisterMediatR(TinyIoCContainer container)

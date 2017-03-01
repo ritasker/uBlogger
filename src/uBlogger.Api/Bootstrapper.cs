@@ -55,7 +55,6 @@ namespace uBlogger.Api
                             {
                                 var claims = new List<Claim>
                                 {
-                                    new Claim("AccountId", account.Id.ToString()),
                                     new Claim("Username", account.UserName),
                                     new Claim("Email", account.Email)
                                 };

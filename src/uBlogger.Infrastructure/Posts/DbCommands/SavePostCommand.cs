@@ -3,7 +3,6 @@ using System.Data;
 using System.Threading.Tasks;
 using Dapper;
 using uBlogger.Domain.Entities;
-using uBlogger.Infrastructure.Accounts.DbCommands;
 using uBlogger.Infrastructure.Database;
 
 namespace uBlogger.Infrastructure.Posts.DbCommands

@@ -17,7 +17,7 @@ namespace uBlogger.Api.Features.Users.Follow
         public void Handle(FollowUserCommand message)
         {
             var account = accountRepository.FindByUsername(message.Username).GetAwaiter().GetResult();
-            var follow = new Domain.Entities.Follow(message.AccountId, account.Id);
+            var follow = new Domain.Entities.Follow(message.Username, account.UserName);
             followRepository.Save(follow).GetAwaiter();
         }
     }

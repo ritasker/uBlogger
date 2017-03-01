@@ -7,10 +7,10 @@ namespace uBlogger.Domain.Entities
         public Guid FollowerId { get; set; }
         public Guid AccountId { get; set; }
 
-        public Follow(Guid followerId, Guid accountId)
+        public Follow(string follower, string followee)
         {
-            FollowerId = followerId;
-            AccountId = accountId;
+            //FollowerId = followerId;
+            //AccountId = accountId;
         }
     }
 }

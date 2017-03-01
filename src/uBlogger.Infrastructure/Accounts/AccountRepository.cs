@@ -1,46 +1,39 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Table;
 using uBlogger.Domain.Entities;
-using uBlogger.Infrastructure.Accounts.DbCommands;
-using uBlogger.Infrastructure.Accounts.DbQueries;
 using uBlogger.Infrastructure.Database;
 
 namespace uBlogger.Infrastructure.Accounts
 {
     public class AccountRepository
     {
-        private readonly IDbConnectionProvider _dbConnectionProvider;
+        private readonly CloudTableClient _cloudTableClient;
 
-        public AccountRepository(IDbConnectionProvider dbConnectionProvider)
+        public AccountRepository(DatabaseConfiguration config)
         {
-            _dbConnectionProvider = dbConnectionProvider;
+            var storageAccount = CloudStorageAccount.Parse(config.ConnectionString);
+            _cloudTableClient = storageAccount.CreateCloudTableClient();
         }
 
         public async Task Save(Account account)
         {
-            using (var connection = _dbConnectionProvider.GetConnection())
-            {
-                var command = new SaveAccountCommand(account);
-                await command.ExecuteAsync(connection);
-            }
+            var tableReference = _cloudTableClient.GetTableReference("AccountByUsername");
+            var operation = TableOperation.Insert(new AccountByUsername(account.UserName, account.Email, account.Hash));
+            await tableReference.ExecuteAsync(operation);
         }
 
         public async Task<Account> FindByUsername(string username)
         {
-            using (var connection = _dbConnectionProvider.GetConnection())
-            {
-                var query = new FindAccountByUsernameQuery(username);
-                return await query.QueryAsync(connection);
-            }
-        }
+            var tableReference = _cloudTableClient.GetTableReference("AccountByUsername");
+            var retrieveOperation = TableOperation.Retrieve<AccountByUsername>(username.Substring(0,3), username);
 
-        public async Task<Account> FindById(Guid accountId)
-        {
-            using (var connection = _dbConnectionProvider.GetConnection())
-            {
-                var query = new FindAccountByIdQuery(accountId);
-                return await query.QueryAsync(connection);
-            }
+            var result = await tableReference.ExecuteAsync(retrieveOperation);
+
+            var accountByUsername = result.Result as AccountByUsername;
+            return accountByUsername != null
+                ? new Account(accountByUsername.Username, accountByUsername.Email, accountByUsername.Hash)
+                : null;
         }
     }
 }

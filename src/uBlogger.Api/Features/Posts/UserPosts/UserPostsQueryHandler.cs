@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using MediatR;
-using uBlogger.Domain.Entities;
 using uBlogger.Infrastructure.Posts;
+using uBlogger.Infrastructure.Posts.TableEntities;
 
 namespace uBlogger.Api.Features.Posts.UserPosts
 {
-    public class UserPostsQueryHandler : IRequestHandler<UserPostsQuery, IEnumerable<Post>>
+    public class UserPostsQueryHandler : IRequestHandler<UserPostsQuery, IEnumerable<UserPost>>
     {
         private readonly PostRepository postRepository;
 
@@ -13,9 +13,9 @@ namespace uBlogger.Api.Features.Posts.UserPosts
         {
             this.postRepository = postRepository;
         }
-        public IEnumerable<Post> Handle(UserPostsQuery message)
+        public IEnumerable<UserPost> Handle(UserPostsQuery message)
         {
-            return postRepository.FindByUsername(message.Username).GetAwaiter().GetResult();
+            return postRepository.PostsByUser(message.Username).GetAwaiter().GetResult();
         }
     }
 }

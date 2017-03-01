@@ -1,11 +1,9 @@
-﻿using System;
-using MediatR;
-using uBlogger.Domain.Entities;
+﻿using MediatR;
 using uBlogger.Infrastructure.Posts;
 
 namespace uBlogger.Api.Features.Posts.AddPost
 {
-    public class AddPostCommandHandler : IRequestHandler<AddPostCommand, Guid>
+    public class AddPostCommandHandler : IRequestHandler<AddPostCommand>
     {
         private readonly PostRepository _postRepository;
 
@@ -14,11 +12,9 @@ namespace uBlogger.Api.Features.Posts.AddPost
             _postRepository = postRepository;
         }
 
-        public Guid Handle(AddPostCommand message)
+        public void Handle(AddPostCommand message)
         {
-            var post = new Post(message.AccountId, message.Content);
-            _postRepository.Save(post);
-            return post.Id;
+            _postRepository.Save(message.Id, message.Username, message.Content);
         }
     }
 }

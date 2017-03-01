@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using MediatR;
@@ -13,13 +12,13 @@ using uBlogger.Api.Features.Posts.AddPost;
 using uBlogger.Api.Features.Posts.Timeline;
 using uBlogger.Api.Features.Posts.UserPosts;
 using uBlogger.Api.Features.Users.Follow;
-using uBlogger.Domain.Entities;
 using uBlogger.Infrastructure;
 using uBlogger.Infrastructure.Accounts;
 using uBlogger.Infrastructure.Database;
 using uBlogger.Infrastructure.Email;
 using uBlogger.Infrastructure.Following;
 using uBlogger.Infrastructure.Posts;
+using uBlogger.Infrastructure.Posts.TableEntities;
 using uBlogger.Infrastructure.Security;
 
 namespace uBlogger.Api
@@ -102,10 +101,10 @@ namespace uBlogger.Api
         private static void RegisterHandlers(TinyIoCContainer container)
         {
             container.Register<IRequestHandler<SignUpCommand>, SignUpCommandHandler>();
-            container.Register<IRequestHandler<AddPostCommand, Guid>, AddPostCommandHandler>();
+            container.Register<IRequestHandler<AddPostCommand>, AddPostCommandHandler>();
             container.Register<IRequestHandler<FollowUserCommand>, FollowUserCommandHandler>();
-            container.Register<IRequestHandler<UserPostsQuery, IEnumerable<Post>>, UserPostsQueryHandler>();
-            container.Register<IRequestHandler<Features.Posts.Timeline.UserTimelineQuery, IEnumerable<Post>>, UserTimelineQueryHandler>();
+            container.Register<IRequestHandler<UserPostsQuery, IEnumerable<UserPost>>, UserPostsQueryHandler>();
+            container.Register<IRequestHandler<UserTimelineQuery, IEnumerable<UserTimeline>>, UserTimelineQueryHandler>();
         }
 
         private static void RegisterServices(TinyIoCContainer container)
@@ -131,7 +130,6 @@ namespace uBlogger.Api
         public override void Configure(INancyEnvironment environment)
         {
             base.Configure(environment);
-
             environment.Tracing(false, true);
         }
     }

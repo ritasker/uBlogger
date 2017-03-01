@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using MediatR;
-using uBlogger.Domain.Entities;
 using uBlogger.Infrastructure.Posts;
+using uBlogger.Infrastructure.Posts.TableEntities;
 
 namespace uBlogger.Api.Features.Posts.Timeline
 {
-    public class UserTimelineQueryHandler : IRequestHandler<UserTimelineQuery, IEnumerable<Post>>
+    public class UserTimelineQueryHandler : IRequestHandler<UserTimelineQuery, IEnumerable<UserTimeline>>
     {
         private readonly PostRepository _postRepository;
 
@@ -14,9 +14,9 @@ namespace uBlogger.Api.Features.Posts.Timeline
             _postRepository = postRepository;
         }
 
-        public IEnumerable<Post> Handle(UserTimelineQuery message)
+        public IEnumerable<UserTimeline> Handle(UserTimelineQuery message)
         {
-            return _postRepository.UserTimeline(message.AccountId).GetAwaiter().GetResult();
+            return _postRepository.UserTimeline(message.Username).GetAwaiter().GetResult();
         }
     }
 }

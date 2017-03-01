@@ -25,8 +25,8 @@ namespace uBlogger.Api.Features.Users
             Get("/{Timeline}", async _ =>
             {
                 this.RequiresAuthentication();
-                var accountId = Context.CurrentUser.Claims.First(x => x.Type == "AccountId").Value;
-                var result =  await this.mediator.Send(new UserTimelineQuery(Guid.Parse(accountId)));
+                var username = Context.CurrentUser.Claims.First(x => x.Type == "Username").Value;
+                var result =  await this.mediator.Send(new UserTimelineQuery(username));
 
                 return Negotiate
                     .WithModel(result)

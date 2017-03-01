@@ -4,13 +4,14 @@ namespace uBlogger.Infrastructure.Following.TableEntities
 {
     public class Follow : TableEntity
     {
-        public Follow(string followee, string follower)
+        public Follow(){ }
+        public Follow(string username1, string username2)
         {
-            PartitionKey = followee;
-            RowKey = follower;
+            PartitionKey = username1;
+            RowKey = username2;
         }
 
-        public string FolloweeUsername => PartitionKey;
-        public string FollowerUsername => RowKey;
+        public string Username1 => PartitionKey;
+        public string Username2 => RowKey;
     }
 }

@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MediatR;
-using uBlogger.Domain.Entities;
+using uBlogger.Infrastructure.Posts.TableEntities;
 
 namespace uBlogger.Api.Features.Posts.Timeline
 {
-    public class UserTimelineQuery : IRequest<IEnumerable<Post>>
+    public class UserTimelineQuery : IRequest<IEnumerable<UserTimeline>>
     {
-        public UserTimelineQuery(Guid accountId)
+        public UserTimelineQuery(string username)
         {
-            AccountId = accountId;
+            Username = username;
         }
 
-        public Guid AccountId { get; set; }
+        public string Username { get; set; }
     }
 }

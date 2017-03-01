@@ -26,8 +26,6 @@ namespace uBlogger.Api.Features.Posts
                     .WithModel(result)
                     .WithStatusCode(HttpStatusCode.OK);
             });
-
-
         }
 
         private object AddPost(IMediator mediator)
@@ -40,19 +38,15 @@ namespace uBlogger.Api.Features.Posts
             {
                 var username = Context.CurrentUser.Claims.First(x => x.Type == "Username").Value;
 
-                if (model.Username == username)
-                {
-                    var accountId = Context.CurrentUser.Claims.First(x => x.Type == "AccountId").Value;
+                if (model.Username != username)
+                    return HttpStatusCode.Forbidden;
 
-                    var postId = mediator.Send(new AddPostCommand(Guid.Parse(accountId), model.Content))
-                        .GetAwaiter()
-                        .GetResult();
-                    return Negotiate
-                        .WithStatusCode(HttpStatusCode.Created)
-                        .WithHeader("location", $"http://localhost:5000/Accounts/{model.Username}/Posts/{postId}");
-                }
+                mediator.Send(new AddPostCommand(Guid.NewGuid(), username, model.Content))
+                    .GetAwaiter()
+                    .GetResult();
 
-                return HttpStatusCode.Forbidden;
+                return Negotiate
+                    .WithStatusCode(HttpStatusCode.Created);
             }
 
             return Negotiate

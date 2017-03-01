@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using uBlogger.Infrastructure.Follow;
 using uBlogger.Infrastructure.Following;
 
 namespace uBlogger.Api.Features.Users.Follow

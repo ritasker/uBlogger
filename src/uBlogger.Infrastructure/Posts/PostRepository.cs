@@ -1,46 +1,75 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using uBlogger.Domain.Entities;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Table;
 using uBlogger.Infrastructure.Database;
-using uBlogger.Infrastructure.Posts.DbCommands;
+using uBlogger.Infrastructure.Following.TableEntities;
+using uBlogger.Infrastructure.Posts.TableEntities;
 
 namespace uBlogger.Infrastructure.Posts
 {
     public class PostRepository
     {
-        private readonly IDbConnectionProvider _dbConnectionProvider;
+        private readonly CloudTableClient _cloudTableClient;
 
-        public PostRepository(IDbConnectionProvider dbConnectionProvider)
+        public PostRepository(DatabaseConfiguration config)
         {
-            _dbConnectionProvider = dbConnectionProvider;
+            var storageAccount = CloudStorageAccount.Parse(config.ConnectionString);
+            _cloudTableClient = storageAccount.CreateCloudTableClient();
         }
 
-        public async Task Save(Post post)
+        public async Task Save(Guid id, string username, string content)
         {
-            using (var connection = _dbConnectionProvider.GetConnection())
+            // Insert into my timeline
+            var userPostsTable = _cloudTableClient.GetTableReference("UserPosts");
+            var userPostOp = TableOperation.Insert(new UserPost(username, id, content));
+            await userPostsTable.ExecuteAsync(userPostOp);
+
+            // Insert into my followers timelines
+            var followersTable = _cloudTableClient.GetTableReference("Followers");
+            var query = new TableQuery<Follow>().Where(
+                TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, username)
+            );
+
+            TableContinuationToken token = null;
+            var batchOperation = new TableBatchOperation();
+            var table = _cloudTableClient.GetTableReference("UserTimeline");
+
+            do
             {
-                var command = new SavePostCommand(post);
-                await command.ExecuteAsync(connection);
-            }
+                var result = await followersTable.ExecuteQuerySegmentedAsync(query, token);
+
+                batchOperation.Clear();
+                result.Results.ForEach(x => batchOperation.Insert(new UserTimeline(x.Username2, id, username, content)));
+                table.ExecuteBatchAsync(batchOperation);
+
+                token = result.ContinuationToken;
+            } while (token != null);
         }
 
-        public async Task<IEnumerable<Post>> FindByUsername(string username)
+        public async Task<IEnumerable<UserPost>> PostsByUser(string username)
         {
-            using (var connection = _dbConnectionProvider.GetConnection())
-            {
-                var command = new PostsByUsernameQuery(username);
-                return await command.QueryAsync(connection);
-            }
+            var table = _cloudTableClient.GetTableReference("UserPosts");
+            var query = new TableQuery<UserPost>().Where(
+                TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, username)
+            ).Take(50);
+
+            var result = await table.ExecuteQuerySegmentedAsync(query, null);
+
+            return result.Results;
         }
 
-        public async Task<IEnumerable<Post>> UserTimeline(Guid accountId)
+        public async Task<IEnumerable<UserTimeline>> UserTimeline(string username)
         {
-            using (var connection = _dbConnectionProvider.GetConnection())
-            {
-                var command = new UserTimelineQuery(accountId);
-                return await command.QueryAsync(connection);
-            }
+            var table = _cloudTableClient.GetTableReference("UserTimeline");
+            var query = new TableQuery<UserTimeline>().Where(
+                TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, username)
+            ).Take(50);
+
+            var result = await table.ExecuteQuerySegmentedAsync(query, null);
+
+            return result.Results;
         }
     }
 }

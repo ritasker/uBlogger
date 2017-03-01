@@ -3,14 +3,16 @@ using MediatR;
 
 namespace uBlogger.Api.Features.Posts.AddPost
 {
-    public class AddPostCommand : IRequest<Guid>
+    public class AddPostCommand : IRequest
     {
-        public Guid AccountId { get; }
+        public string Username { get; }
         public string Content { get; }
+        public Guid Id { get; }
 
-        public AddPostCommand(Guid accountId, string content)
+        public AddPostCommand(Guid id, string username, string content)
         {
-            AccountId = accountId;
+            Id = id;
+            Username = username;
             Content = content;
         }
     }

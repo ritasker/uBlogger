@@ -1,12 +1,8 @@
 using System;
-using System.Linq;
 using System.Reflection;
-using Dapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Npgsql;
 using uBlogger.Infrastructure;
-using uBlogger.Infrastructure.Email;
 
 namespace uBlogger.Api
 {
@@ -19,7 +15,8 @@ namespace uBlogger.Api
         {
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("apisettings.json")
-                .SetBasePath(Path.GetDirectoryName(typeof(Startup).GetTypeInfo().Assembly.Location));
+                .SetBasePath(Path.GetDirectoryName(typeof(Startup).GetTypeInfo().Assembly.Location))
+                .AddEnvironmentVariables();                ;
 
             var config = builder.Build();
 

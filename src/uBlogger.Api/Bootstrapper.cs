@@ -8,14 +8,12 @@ using Nancy.Conventions;
 using Nancy.TinyIoc;
 using uBlogger.Api.Authorization;
 using uBlogger.Api.Features.Accounts.SignUp;
-using uBlogger.Api.Features.Posts.AddPost;
-using uBlogger.Api.Features.Posts.Timeline;
-using uBlogger.Api.Features.Posts.UserPosts;
 using uBlogger.Api.Features.Users.Follow;
+using uBlogger.Api.Features.Users.Post;
+using uBlogger.Api.Features.Users.Timeline;
+using uBlogger.Api.Features.Users.UserPosts;
 using uBlogger.Infrastructure;
 using uBlogger.Infrastructure.Accounts;
-using uBlogger.Infrastructure.Database;
-using uBlogger.Infrastructure.Email;
 using uBlogger.Infrastructure.Following;
 using uBlogger.Infrastructure.Posts;
 using uBlogger.Infrastructure.Posts.TableEntities;
@@ -87,8 +85,6 @@ namespace uBlogger.Api
 
             container.Register(applicationConfiguration.Database);
 
-            container.Register<IDbConnectionProvider, PostgresConnectionProvider>();
-
             RegisterRepositories(container);
 
             RegisterServices(container);
@@ -109,7 +105,6 @@ namespace uBlogger.Api
 
         private static void RegisterServices(TinyIoCContainer container)
         {
-            container.Register<EmailService>();
             container.Register<HashingService>();
         }
 

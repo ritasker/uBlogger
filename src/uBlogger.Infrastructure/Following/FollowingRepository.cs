@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
-using uBlogger.Infrastructure.Database;
+using uBlogger.Infrastructure.DataAccess;
 using uBlogger.Infrastructure.Following.TableEntities;
 
 namespace uBlogger.Infrastructure.Following

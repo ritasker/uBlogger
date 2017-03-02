@@ -7,8 +7,10 @@ using Nancy;
 using Nancy.ModelBinding;
 using Nancy.Security;
 using Nancy.Validation;
-using uBlogger.Api.Features.Posts.Timeline;
 using uBlogger.Api.Features.Users.Follow;
+using uBlogger.Api.Features.Users.Post;
+using uBlogger.Api.Features.Users.Timeline;
+using uBlogger.Api.Features.Users.UserPosts;
 
 namespace uBlogger.Api.Features.Users
 {
@@ -22,17 +24,34 @@ namespace uBlogger.Api.Features.Users
 
             Post("/{Username}/Follow", async _ => await FollowUser());
 
-            Get("/{Timeline}", async _ =>
-            {
-                this.RequiresAuthentication();
-                var username = Context.CurrentUser.Claims.First(x => x.Type == "Username").Value;
-                var result =  await this.mediator.Send(new UserTimelineQuery(username));
+            Post("/{Username}/Posts", async args => await AddPost());
 
-                return Negotiate
-                    .WithModel(result)
-                    .WithStatusCode(HttpStatusCode.OK);
-            });
+            Get("/{Username}/Posts", async args => await UserPosts(args));
 
+            Get("/{Username}/Timeline", async args => await UserTimeline(args));
+
+        }
+
+        private async Task<object> UserTimeline(dynamic args)
+        {
+            this.RequiresAuthentication();
+            var username = Context.CurrentUser.Claims.First(x => x.Type == "Username").Value;
+
+            if (args.Username != username)
+                return HttpStatusCode.Forbidden;
+
+            var result = await mediator.Send(new UserTimelineQuery(username));
+            return Negotiate
+                .WithModel(result)
+                .WithStatusCode(HttpStatusCode.OK);
+        }
+
+        private async Task<object> UserPosts(dynamic args)
+        {
+            var result = await mediator.Send(new UserPostsQuery(args.Username));
+            return Negotiate
+                .WithModel(result)
+                .WithStatusCode(HttpStatusCode.OK);
         }
 
         private async Task<object> FollowUser()
@@ -56,6 +75,29 @@ namespace uBlogger.Api.Features.Users
                     {
                         new ModelValidationError("Username", "You cannot Follow Yourself")
                     });
+            }
+
+            return Negotiate
+                .WithModel(ModelValidationResult.FormattedErrors)
+                .WithStatusCode(HttpStatusCode.UnprocessableEntity);
+        }
+
+        private async Task<object> AddPost()
+        {
+            this.RequiresAuthentication();
+
+            var model = this.BindAndValidate<AddPostViewModel>();
+
+            if (ModelValidationResult.IsValid)
+            {
+                var username = Context.CurrentUser.Claims.First(x => x.Type == "Username").Value;
+
+                if (model.Username != username)
+                    return HttpStatusCode.Forbidden;
+
+                await mediator.Send(new AddPostCommand(Guid.NewGuid(), username, model.Content));
+                return Negotiate
+                    .WithStatusCode(HttpStatusCode.Created);
             }
 
             return Negotiate

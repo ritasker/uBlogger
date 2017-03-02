@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace uBlogger.Domain
+namespace uBlogger.Infrastructure
 {
     public static class Guard
     {

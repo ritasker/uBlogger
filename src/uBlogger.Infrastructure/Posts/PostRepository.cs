@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
-using uBlogger.Infrastructure.Database;
+using uBlogger.Infrastructure.DataAccess;
 using uBlogger.Infrastructure.Following.TableEntities;
 using uBlogger.Infrastructure.Posts.TableEntities;
 
@@ -22,7 +22,7 @@ namespace uBlogger.Infrastructure.Posts
         public async Task Save(Guid id, string username, string content)
         {
             // Insert into my timeline
-            var userPostsTable = _cloudTableClient.GetTableReference("UserPosts");
+            var userPostsTable = _cloudTableClient.GetTableReference("PostsByUser");
             var userPostOp = TableOperation.Insert(new UserPost(username, id, content));
             await userPostsTable.ExecuteAsync(userPostOp);
 
@@ -50,7 +50,7 @@ namespace uBlogger.Infrastructure.Posts
 
         public async Task<IEnumerable<UserPost>> PostsByUser(string username)
         {
-            var table = _cloudTableClient.GetTableReference("UserPosts");
+            var table = _cloudTableClient.GetTableReference("PostsByUser");
             var query = new TableQuery<UserPost>().Where(
                 TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, username)
             ).Take(50);

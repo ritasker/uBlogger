@@ -1,4 +1,4 @@
-﻿namespace uBlogger.Infrastructure.Database
+﻿namespace uBlogger.Infrastructure.DataAccess
 {
     public class DatabaseConfiguration
     {

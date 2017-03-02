@@ -14,7 +14,7 @@ namespace uBlogger.Infrastructure.Posts.TableEntities
             RowKey = id.ToString();
         }
 
-        public string Author { get; }
-        public string Content { get; }
+        public string Author { get; set; }
+        public string Content { get; set; }
     }
 }

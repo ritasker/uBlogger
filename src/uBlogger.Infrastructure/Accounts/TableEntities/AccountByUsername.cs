@@ -1,13 +1,10 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 
-namespace uBlogger.Domain.Entities
+namespace uBlogger.Infrastructure.Accounts.TableEntities
 {
     public class AccountByUsername : TableEntity
     {
-        public string Email { get; }
-        public string Hash { get; }
-        public string Username => RowKey;
-
+        public AccountByUsername() { }
         public AccountByUsername(string userName, string email, string hash)
         {
             PartitionKey = userName.Substring(0, 3);
@@ -15,5 +12,9 @@ namespace uBlogger.Domain.Entities
             Email = email;
             Hash = hash;
         }
+
+        public string Email { get; set; }
+        public string Hash { get; set;  }
+        public string Username => RowKey;
     }
 }

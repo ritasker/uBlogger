@@ -3,7 +3,7 @@ using MediatR;
 using uBlogger.Infrastructure.Posts;
 using uBlogger.Infrastructure.Posts.TableEntities;
 
-namespace uBlogger.Api.Features.Posts.UserPosts
+namespace uBlogger.Api.Features.Users.UserPosts
 {
     public class UserPostsQueryHandler : IRequestHandler<UserPostsQuery, IEnumerable<UserPost>>
     {

@@ -2,7 +2,7 @@
 using MediatR;
 using uBlogger.Infrastructure.Posts.TableEntities;
 
-namespace uBlogger.Api.Features.Posts.Timeline
+namespace uBlogger.Api.Features.Users.Timeline
 {
     public class UserTimelineQuery : IRequest<IEnumerable<UserTimeline>>
     {

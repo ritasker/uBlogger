@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace uBlogger.Api.Features.Posts.Timeline
+namespace uBlogger.Api.Features.Users.Timeline
 {
     public class TimelineViewModel
     {

@@ -13,6 +13,6 @@ namespace uBlogger.Infrastructure.Posts.TableEntities
             RowKey = id.ToString();
         }
 
-        public string Content { get; }
+        public string Content { get; set; }
     }
 }

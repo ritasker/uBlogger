@@ -1,4 +1,4 @@
-﻿using uBlogger.Infrastructure.Database;
+﻿using uBlogger.Infrastructure.DataAccess;
 
 namespace uBlogger.Infrastructure
 {

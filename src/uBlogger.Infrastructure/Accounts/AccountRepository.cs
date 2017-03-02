@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
-using uBlogger.Domain.Entities;
-using uBlogger.Infrastructure.Database;
+using uBlogger.Infrastructure.Accounts.TableEntities;
+using uBlogger.Infrastructure.DataAccess;
 
 namespace uBlogger.Infrastructure.Accounts
 {

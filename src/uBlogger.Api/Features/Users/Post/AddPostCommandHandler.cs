@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using uBlogger.Infrastructure.Posts;
 
-namespace uBlogger.Api.Features.Posts.AddPost
+namespace uBlogger.Api.Features.Users.Post
 {
     public class AddPostCommandHandler : IRequestHandler<AddPostCommand>
     {

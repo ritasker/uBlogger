@@ -41,16 +41,33 @@ namespace uBlogger.Api.Features.Users
                 return HttpStatusCode.Forbidden;
 
             var result = await mediator.Send(new UserTimelineQuery(username));
+            var posts = result.Select(x => new PostViewModel
+            {
+                Id = x.RowKey,
+                Date = x.Timestamp.UtcDateTime,
+                Author = x.PartitionKey,
+                Content = x.Content
+            });
+
             return Negotiate
-                .WithModel(result)
+                .WithModel(posts)
                 .WithStatusCode(HttpStatusCode.OK);
         }
 
         private async Task<object> UserPosts(dynamic args)
         {
             var result = await mediator.Send(new UserPostsQuery(args.Username));
+
+            var posts = result.Select(x => new PostViewModel
+            {
+                Id = x.RowKey,
+                Date = x.Timestamp.UtcDateTime,
+                Author = x.PartitionKey,
+                Content = x.Content
+            });
+
             return Negotiate
-                .WithModel(result)
+                .WithModel(posts)
                 .WithStatusCode(HttpStatusCode.OK);
         }
 

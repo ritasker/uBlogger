@@ -1,9 +1,8 @@
-﻿using MediatR;
-
-namespace uBlogger.Api.Features.Users.Follow
+﻿namespace uBlogger.Api.Features.Users.Follow
 {
-    public class FollowUserCommand : IRequest
+    public class FollowUserCommand
     {
+        public FollowUserCommand() { }
         public FollowUserCommand(string follower, string followee)
         {
             Follower = follower;

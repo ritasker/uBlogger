@@ -16,13 +16,6 @@ namespace uBlogger.Infrastructure.Accounts
             _cloudTableClient = storageAccount.CreateCloudTableClient();
         }
 
-        public async Task Save(string userName, string email, string hash)
-        {
-            var tableReference = _cloudTableClient.GetTableReference("AccountByUsername");
-            var operation = TableOperation.Insert(new AccountByUsername(userName, email, hash));
-            await tableReference.ExecuteAsync(operation);
-        }
-
         public async Task<AccountByUsername> FindByUsername(string username)
         {
             var tableReference = _cloudTableClient.GetTableReference("AccountByUsername");

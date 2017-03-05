@@ -1,14 +1,11 @@
 ﻿using uBlogger.Infrastructure.DataAccess;
+using uBlogger.Infrastructure.MessageBus;
 
 namespace uBlogger.Infrastructure
 {
     public class ApplicationConfiguration
     {
-        public ApplicationConfiguration(string connectionString)
-        {
-            Database = new DatabaseConfiguration(connectionString);
-        }
-
         public DatabaseConfiguration Database { get; set; }
+        public ServiceBusConfiguration ServiceBus { get; set; }
     }
 }

@@ -1,4 +1,9 @@
 {
-    "ConnectionString": "UseDevelopmentStorage=true;"
+    "Database": {
+        "ConnectionString": "<Table Storage Connection String>"
+    },
+    "ServiceBus": {
+        "ConnectionString": "<Service Bus Connection String>"
+    }
 }
 

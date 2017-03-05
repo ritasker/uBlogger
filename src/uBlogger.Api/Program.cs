@@ -16,11 +16,11 @@ namespace uBlogger.Api
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("apisettings.json")
                 .SetBasePath(Path.GetDirectoryName(typeof(Startup).GetTypeInfo().Assembly.Location))
-                .AddEnvironmentVariables();                ;
+                .AddEnvironmentVariables();
 
             var config = builder.Build();
-
-            var appConfig = new ApplicationConfiguration(config["ConnectionString"]);
+            var appConfig = new ApplicationConfiguration();
+            config.Bind(appConfig);
 
             using (var bootstrapper = new Bootstrapper(appConfig))
             {

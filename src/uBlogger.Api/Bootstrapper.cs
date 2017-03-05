@@ -1,22 +1,15 @@
 using System.Collections.Generic;
 using System.Security.Claims;
-using MediatR;
 using Nancy;
 using Nancy.Bootstrapper;
 using Nancy.Configuration;
 using Nancy.Conventions;
 using Nancy.TinyIoc;
 using uBlogger.Api.Authorization;
-using uBlogger.Api.Features.Accounts.SignUp;
-using uBlogger.Api.Features.Users.Follow;
-using uBlogger.Api.Features.Users.Post;
-using uBlogger.Api.Features.Users.Timeline;
-using uBlogger.Api.Features.Users.UserPosts;
 using uBlogger.Infrastructure;
 using uBlogger.Infrastructure.Accounts;
-using uBlogger.Infrastructure.Following;
+using uBlogger.Infrastructure.MessageBus;
 using uBlogger.Infrastructure.Posts;
-using uBlogger.Infrastructure.Posts.TableEntities;
 using uBlogger.Infrastructure.Security;
 
 namespace uBlogger.Api
@@ -84,42 +77,22 @@ namespace uBlogger.Api
             base.ConfigureApplicationContainer(container);
 
             container.Register(applicationConfiguration.Database);
+            container.Register(applicationConfiguration.ServiceBus);
 
             RegisterRepositories(container);
-
             RegisterServices(container);
-
-            RegisterHandlers(container);
-
-            RegisterMediatR(container);
-        }
-
-        private static void RegisterHandlers(TinyIoCContainer container)
-        {
-            container.Register<IRequestHandler<SignUpCommand>, SignUpCommandHandler>();
-            container.Register<IRequestHandler<AddPostCommand>, AddPostCommandHandler>();
-            container.Register<IRequestHandler<FollowUserCommand>, FollowUserCommandHandler>();
-            container.Register<IRequestHandler<UserPostsQuery, IEnumerable<UserPost>>, UserPostsQueryHandler>();
-            container.Register<IRequestHandler<UserTimelineQuery, IEnumerable<UserTimeline>>, UserTimelineQueryHandler>();
         }
 
         private static void RegisterServices(TinyIoCContainer container)
         {
             container.Register<HashingService>();
+            container.Register<ServiceBusClient>();
         }
 
         private static void RegisterRepositories(TinyIoCContainer container)
         {
             container.Register<AccountRepository>();
             container.Register<PostRepository>();
-            container.Register<FollowingRepository>();
-        }
-
-        private static void RegisterMediatR(TinyIoCContainer container)
-        {
-            container.Register<SingleInstanceFactory>((c, p) => c.Resolve);
-            container.Register<MultiInstanceFactory>((c, p) => c.ResolveAll);
-            container.Register<IMediator, Mediator>();
         }
 
         public override void Configure(INancyEnvironment environment)

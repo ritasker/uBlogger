@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using uBlogger.Infrastructure.DataAccess;
-using uBlogger.Infrastructure.Following.TableEntities;
 using uBlogger.Infrastructure.Posts.TableEntities;
 
 namespace uBlogger.Infrastructure.Posts
@@ -17,35 +15,6 @@ namespace uBlogger.Infrastructure.Posts
         {
             var storageAccount = CloudStorageAccount.Parse(config.ConnectionString);
             _cloudTableClient = storageAccount.CreateCloudTableClient();
-        }
-
-        public async Task Save(Guid id, string username, string content)
-        {
-            // Insert into my timeline
-            var userPostsTable = _cloudTableClient.GetTableReference("PostsByUser");
-            var userPostOp = TableOperation.Insert(new UserPost(username, id, content));
-            await userPostsTable.ExecuteAsync(userPostOp);
-
-            // Insert into my followers timelines
-            var followersTable = _cloudTableClient.GetTableReference("Followers");
-            var query = new TableQuery<Follow>().Where(
-                TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, username)
-            );
-
-            TableContinuationToken token = null;
-            var batchOperation = new TableBatchOperation();
-            var table = _cloudTableClient.GetTableReference("UserTimeline");
-
-            do
-            {
-                var result = await followersTable.ExecuteQuerySegmentedAsync(query, token);
-
-                batchOperation.Clear();
-                result.Results.ForEach(x => batchOperation.Insert(new UserTimeline(x.Username2, id, username, content)));
-                table.ExecuteBatchAsync(batchOperation);
-
-                token = result.ContinuationToken;
-            } while (token != null);
         }
 
         public async Task<IEnumerable<UserPost>> PostsByUser(string username)

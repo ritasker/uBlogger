@@ -2,25 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MediatR;
 using Nancy;
 using Nancy.ModelBinding;
 using Nancy.Security;
 using Nancy.Validation;
 using uBlogger.Api.Features.Users.Follow;
 using uBlogger.Api.Features.Users.Post;
-using uBlogger.Api.Features.Users.Timeline;
-using uBlogger.Api.Features.Users.UserPosts;
+using uBlogger.Infrastructure.MessageBus;
+using uBlogger.Infrastructure.Posts;
 
 namespace uBlogger.Api.Features.Users
 {
     public class UserModule : NancyModule
     {
-        private readonly IMediator mediator;
+        private readonly ServiceBusClient serviceBusClient;
+        private readonly PostRepository repository;
 
-        public UserModule(IMediator mediator) : base("/Users")
+        public UserModule(ServiceBusClient serviceBusClient, PostRepository repository) : base("/Users")
         {
-            this.mediator = mediator;
+            this.repository = repository;
+            this.serviceBusClient = serviceBusClient;
 
             Post("/{Username}/Follow", async _ => await FollowUser());
 
@@ -40,7 +41,8 @@ namespace uBlogger.Api.Features.Users
             if (args.Username != username)
                 return HttpStatusCode.Forbidden;
 
-            var result = await mediator.Send(new UserTimelineQuery(username));
+            var result = await repository.UserTimeline(username);
+
             var posts = result.Select(x => new PostViewModel
             {
                 Id = x.RowKey,
@@ -56,7 +58,8 @@ namespace uBlogger.Api.Features.Users
 
         private async Task<object> UserPosts(dynamic args)
         {
-            var result = await mediator.Send(new UserPostsQuery(args.Username));
+            string username = args.Username;
+            var result = await repository.PostsByUser(username);
 
             var posts = result.Select(x => new PostViewModel
             {
@@ -81,9 +84,9 @@ namespace uBlogger.Api.Features.Users
             {
                 var username = Context.CurrentUser.Claims.First(x => x.Type == "Username").Value;
 
-                if (!String.Equals(model.Username, username, StringComparison.CurrentCultureIgnoreCase))
+                if (!string.Equals(model.Username, username, StringComparison.CurrentCultureIgnoreCase))
                 {
-                    await mediator.Send(new FollowUserCommand(username, model.Username));
+                    await serviceBusClient.Send(new FollowUserCommand(username, model.Username));
                     return HttpStatusCode.Created;
                 }
 
@@ -105,21 +108,18 @@ namespace uBlogger.Api.Features.Users
 
             var model = this.BindAndValidate<AddPostViewModel>();
 
-            if (ModelValidationResult.IsValid)
-            {
-                var username = Context.CurrentUser.Claims.First(x => x.Type == "Username").Value;
-
-                if (model.Username != username)
-                    return HttpStatusCode.Forbidden;
-
-                await mediator.Send(new AddPostCommand(Guid.NewGuid(), username, model.Content));
+            if (!ModelValidationResult.IsValid)
                 return Negotiate
-                    .WithStatusCode(HttpStatusCode.Created);
-            }
+                    .WithModel(ModelValidationResult.FormattedErrors)
+                    .WithStatusCode(HttpStatusCode.UnprocessableEntity);
 
+            var username = Context.CurrentUser.Claims.First(x => x.Type == "Username").Value;
+            if (!string.Equals(model.Username, username, StringComparison.CurrentCultureIgnoreCase))
+                return HttpStatusCode.Forbidden;
+
+            await serviceBusClient.Send(new PostContentCommand(Guid.NewGuid(), username, model.Content));
             return Negotiate
-                .WithModel(ModelValidationResult.FormattedErrors)
-                .WithStatusCode(HttpStatusCode.UnprocessableEntity);
+                .WithStatusCode(HttpStatusCode.Created);
         }
     }
 }

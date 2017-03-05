@@ -1,18 +1,17 @@
-﻿using MediatR;
-
-namespace uBlogger.Api.Features.Accounts.SignUp
+﻿namespace uBlogger.Api.Features.Accounts.SignUp
 {
-    public class SignUpCommand : IRequest
+    public class SignUpCommand
     {
-        public SignUpCommand(string userName, string email, string password)
+        public SignUpCommand() {}
+        public SignUpCommand(string userName, string email, string hash)
         {
             UserName = userName;
             Email = email;
-            Password = password;
+            Hash = hash;
         }
 
-        public string UserName { get; }
-        public string Email { get; }
-        public string Password { get; }
+        public string UserName { get; set;}
+        public string Email { get; set;}
+        public string Hash { get; set;}
     }
 }

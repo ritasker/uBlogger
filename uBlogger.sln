@@ -7,6 +7,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "uBlogger.Api", "src\uBlogge
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "uBlogger.Infrastructure", "src\uBlogger.Infrastructure\uBlogger.Infrastructure.xproj", "{D5208C2F-4D9B-477A-A04D-9F0443D99E22}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Microsoft.Azure.ServiceBus", "src\Microsoft.Azure.ServiceBus\Microsoft.Azure.ServiceBus.xproj", "{5A3F9C0C-D5CF-4B52-A2F4-AA80558E730D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D5208C2F-4D9B-477A-A04D-9F0443D99E22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5208C2F-4D9B-477A-A04D-9F0443D99E22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5208C2F-4D9B-477A-A04D-9F0443D99E22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A3F9C0C-D5CF-4B52-A2F4-AA80558E730D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A3F9C0C-D5CF-4B52-A2F4-AA80558E730D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A3F9C0C-D5CF-4B52-A2F4-AA80558E730D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A3F9C0C-D5CF-4B52-A2F4-AA80558E730D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

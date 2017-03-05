@@ -1,30 +1,43 @@
 ﻿using System.Threading.Tasks;
-using MediatR;
 using Nancy;
 using Nancy.ModelBinding;
 using uBlogger.Api.Features.Accounts.SignUp;
+using uBlogger.Infrastructure.MessageBus;
+using uBlogger.Infrastructure.Security;
 
 namespace uBlogger.Api.Features.Accounts
 {
     public class AccountModule : NancyModule
     {
-        private readonly IMediator _mediator;
+        private readonly ServiceBusClient busClient;
+        private readonly HashingService hashingService;
 
-        public AccountModule(IMediator mediator)
+        public AccountModule(ServiceBusClient busClient, HashingService hashingService)
         {
-            _mediator = mediator;
+            this.busClient = busClient;
+            this.hashingService = hashingService;
 
             Post("/SignUp", async _ => await SignUp());
         }
 
-        private Task<HttpStatusCode> SignUp()
+        private async Task<object> SignUp()
         {
             var model = this.BindAndValidate<SignUpViewModel>();
-            var command = new SignUpCommand(model.Username, model.Email, model.Password);
 
-            _mediator.Send(command);
+            if (!ModelValidationResult.IsValid)
+                return Negotiate
+                    .WithModel(ModelValidationResult.FormattedErrors)
+                    .WithStatusCode(HttpStatusCode.UnprocessableEntity);
 
-            return Task.FromResult(HttpStatusCode.Created);
+            var command = new SignUpCommand(
+                model.Username,
+                model.Email,
+                hashingService.HashPassword(model.Password)
+            );
+
+            await busClient.Send(command);
+
+            return HttpStatusCode.Accepted;
         }
     }
 }

@@ -87,7 +87,7 @@ namespace uBlogger.Api.Features.Users
                 if (!string.Equals(model.Username, username, StringComparison.CurrentCultureIgnoreCase))
                 {
                     await serviceBusClient.Send(new FollowUserCommand(username, model.Username));
-                    return HttpStatusCode.Created;
+                    return HttpStatusCode.Accepted;
                 }
 
                 ModelValidationResult.Errors.Add("Username",
@@ -119,7 +119,7 @@ namespace uBlogger.Api.Features.Users
 
             await serviceBusClient.Send(new PostContentCommand(Guid.NewGuid(), username, model.Content));
             return Negotiate
-                .WithStatusCode(HttpStatusCode.Created);
+                .WithStatusCode(HttpStatusCode.Accepted);
         }
     }
 }
